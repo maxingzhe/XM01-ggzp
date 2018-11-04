@@ -1,7 +1,7 @@
 
 import {combineReducers} from 'redux';
 
-import {AUTH_SUCCESS,ERR_MSG,UPDATE_USER,RESET_USER} from './action-types';
+import {AUTH_SUCCESS,ERR_MSG,UPDATE_USER,RESET_USER,UPDATE_USER_LIST,RESET_USER_LIST} from './action-types';
 
 import {getRedirectPath} from '../utils'
 const initUserState = {
@@ -14,19 +14,31 @@ const initUserState = {
 function user(preState=initUserState,action) {
   switch (action.type){
     case AUTH_SUCCESS:
-      return{username:action.data.username,type:action.data.type,msg:'',redirectTo: getRedirectPath(action.data.type, action.data.header)};
+      return{...action.data,msg:'',redirectTo: getRedirectPath(action.data.type, action.data.header)};
     case ERR_MSG:
-      return{...action.data}
+      return action.data
     case UPDATE_USER:
       return action.data
     case RESET_USER:
-      return {...action.data}
+      return action.data
     default:
       return preState
   }
 }
 
+const initUserListState =[];
+function userList(preState=initUserListState,action) {
+  switch (action.type){
+    case UPDATE_USER_LIST:
+      return action.data;
+    case RESET_USER_LIST:
+      return action.data;
+    default :
+      return preState
+  }
+}
 //合并暴露reducers函数
 export default combineReducers({
-  user
+  user,
+  userList
 })

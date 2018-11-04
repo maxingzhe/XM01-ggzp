@@ -1,39 +1,54 @@
 import React, {Component} from 'react';
 
-import {NavBar,List,InputItem,Button,WhiteSpace,WingBlank} from 'antd-mobile'
+import {NavBar,InputItem,List,Button,WhiteSpace,WingBlank} from 'antd-mobile'
 
 import Logo from '../logo';
 
-import {reqLogin} from '../../api'
+import {Redirect} from 'react-router-dom';
 
-const Item = List.Item;
-class Register extends Component {
+import PropTypes from 'prop-types';
+
+
+
+
+class Login extends Component {
+  
+  static propTypes = {
+    user:PropTypes.object.isRequired,
+    login:PropTypes.func.isRequired
+  }
+  
   state = {
     username:'',
-    password:'',
-    repassword:''
+    password:''
   }
   handleChange = (name,val) =>{
     this.setState({
       [name]:val
     })
   }
-  register = async()=>{
-      const {username,password}=this.state
-      console.log(username,password)
+
+  login = async () => {
+    //获取表单
+    const {username,password} = this.state;
+    //发送ajax，更新状态
+    this.props.login({username,password})
+  }
   
-      const data = await reqLogin({username,password})
-      console.log(data)
+  goRegister=()=>{
+    this.props.history.replace('/register')
   }
-  goLogin = ()=>{
-    //跳转到登录路由，编程式导航
-    this.props.history.replace('./register')//替换浏览历史记录
-  }
+  
   render () {
+    const {msg,redirectTo} = this.props.user;
+    if(redirectTo){
+      return <Redirect to={redirectTo}/>
+    }
     return (
       <div>
         <NavBar>硅 谷 直 聘</NavBar>
         <Logo/>
+        {msg?<p className="err-msg">{msg}</p>:''}
         <WingBlank>
           <form>
             <List>
@@ -51,9 +66,9 @@ class Register extends Component {
               <WhiteSpace />
               <WhiteSpace />
               <WhiteSpace />
-              <Button type="primary" onClick={this.register}>登 录</Button>
+              <Button type="primary" onClick={this.login}>登 录</Button>
               <WhiteSpace />
-              <Button onClick={this.goLogin}>注 册</Button>
+              <Button onClick={this.goRegister}>注 册</Button>
             </List>
           </form>
         </WingBlank>
@@ -62,4 +77,4 @@ class Register extends Component {
   }
 }
 
-export default Register;
+export default Login

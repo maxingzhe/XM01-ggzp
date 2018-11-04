@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
-import {NavBar, InputItem, Button, List, TextareaItem } from 'antd-mobile';
+import {NavBar, InputItem, Button, TextareaItem } from 'antd-mobile';
 import PropTypes from 'prop-types';
 import HeaderSelector from '../header-selector';
+import {Redirect} from 'react-router-dom'
 
 class LaobanInfo extends Component {
   static propTypes = {
@@ -33,7 +34,10 @@ class LaobanInfo extends Component {
   }
   
   render () {
-    const {msgs} = this.props.user
+    const {msgs,header} = this.props.user;
+    if(header){
+      return <Redirect to={'/laoban'}/>
+    }
     return (
       <div>
         <NavBar>老板信息完善</NavBar>
